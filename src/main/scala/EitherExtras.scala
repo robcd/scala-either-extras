@@ -17,7 +17,7 @@ object EitherExtras {
         check <- checks
         msg <- check(any).left
       } msgs = msg::msgs
-      if (msgs.isEmpty) Right(f(any)) else Left(msgs)
+      if (msgs.isEmpty) Right(f(any)) else Left(msgs.reverse)
     }
   }
 }
