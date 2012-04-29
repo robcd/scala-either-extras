@@ -36,7 +36,20 @@ class Tests extends FunSuite with ShouldMatchers {
     val expectedValue = Right[List[String], T](value)
     value.check(checkTrue, checkPositive) should equal(expectedValue)
   }
-  ignore("checkAndMap") {
+  test("checkAndMap bad value") {
+    val value: T = (false, -1)
+    val expectedValue = {
+      val msgs = List("Boolean field was "+ value._1, "Int field not > 0: "+ value._2)
+      Left[List[String], T](msgs)
+    }
+    def f(t: T) = t.toString
+    value.checkAndMap(checkTrue, checkPositive)(f) should equal(expectedValue)
+  }
+  test("checkAndMap good value") {
+    val value: T = (true, 1)
+    val expectedValue = Right[List[String], String](value.toString)
+    def f(t: T) = t.toString
+    value.checkAndMap(checkTrue, checkPositive)(f) should equal(expectedValue)
   }
 }
 
