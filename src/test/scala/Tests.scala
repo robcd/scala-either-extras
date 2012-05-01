@@ -51,5 +51,14 @@ class Tests extends FunSuite with ShouldMatchers {
     def f(t: T) = t.toString
     value.checkAndMap(checkTrue, checkPositive)(f) should equal(expectedValue)
   }
+  test("check taking Seq") {
+    val value: T = (false, -1)
+    val checks = Seq(checkTrue _, checkPositive _)
+    val expectedValue = {
+      val msgs = List("Boolean field was "+ value._1, "Int field not > 0: "+ value._2)
+      Left[List[String], T](msgs)
+    }
+    value.check(checks: _*) should equal(expectedValue)
+  }
 }
 
