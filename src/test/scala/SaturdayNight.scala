@@ -131,3 +131,35 @@ object Test2 extends App with Test {
  * halting at the first sign of trouble. Imagine trying to do this in Java, using exceptions,
  * with ten checks.
  */
+
+/**
+ * Part Three : Gay Bar
+ *
+ * And for those wondering how to do this with a *very long list* of checks. Use sequence:
+ *   List[ValidationNEL[E, A]] ~> (via sequence) ~> ValidationNEL[E, List[A]]
+ *
+ * Here we go (unfortunately we need to use a type lambda on the call to sequence):
+ */
+object GayBar extends Nightclub {
+  import EitherExtras._
+  def checkGender(p: Person): Either[String, Person] =
+    if (p.gender != Gender.Male) "Men Only".fail
+    else p.succeed
+
+  def costToEnter(p: Person): Either[List[String], Double] = {
+    val checks = List(checkAge _, checkClothes _, checkSobriety _, checkGender _)
+    p.checkAndMap(checks: _*)(_.age + 1.5D)
+  }
+}
+
+object Test3 extends App with Test {
+  import GayBar._
+
+  run(costToEnter(Person(Gender.Male, 59, Set("Jeans"), Sobriety.Paralytic)))
+  //Failure(NonEmptyList(Too Old!, Smarten Up!, Sober Up!))
+}
+
+/**
+ * As always; the point is that our validation functions are "static";
+ * we do not need to change the way they have been coded because we want to combine them in different ways
+ */
