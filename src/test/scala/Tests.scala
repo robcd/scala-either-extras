@@ -61,7 +61,6 @@ class Tests extends FunSuite with ShouldMatchers {
     value.check(checks: _*) should equal(expectedValue)
   }
   test("that substituting Left results in a Left") {
-    //case class CompoundValue(n: Int, b: Boolean, s: String)
     val i2i2i: Int => Int => Int = x => y => x * y
     val left: Either[String, Int] = Left("error")
 
@@ -70,6 +69,21 @@ class Tests extends FunSuite with ShouldMatchers {
     val x = 2; val y = 3
     left <*> (Right[String, Int](x) <*> Right(i2i2i)) should equal (left)
     Right[String, Int](y) <*> (left <*> Right(i2i2i)) should equal (left)
+  }
+  test("combining checks on different types") {
+    type E[R] = Either[String, R]
+    def checkPositive(n: Int): E[Int] = if (n > 0) Right(n) else Left("Int not > 0: "+ n)
+    def checkTrue(b: Boolean): E[Boolean] = if (b == true) Right(b) else Left("Boolean was "+ b)
+    def checkNonEmpty(s: String): E[String] = if (s != "") Right(s) else Left("Empty String")
+    case class CompoundValue(n: Int, b: Boolean, s: String)
+    val n = 1; val b = true; val s = "faen"
+    val n2b2s: Int => Boolean => String => CompoundValue = n => b => s => CompoundValue(n, b, s)
+    val expected = Right(CompoundValue(n, b, s))
+
+    import EitherOps._
+    checkNonEmpty(s) <*>
+    (checkTrue(b) <*>
+     (checkPositive(n) <*> Right(n2b2s))) should equal(expected)
   }
 }
 
