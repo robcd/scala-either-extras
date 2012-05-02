@@ -5,6 +5,8 @@ trait EitherOps[L, R1, R2] {
 }
 
 object EitherOps {
+  def lift[L, R1, R2](f: R1 => R2)(l: L) = Right[L, R1 => R2](f)
+
   implicit def eitherOfFunction2EitherOps[L, R1, R2](f: Either[L, R1 => R2]): EitherOps[L, R1, R2] =
     new EitherOps[L, R1, R2] {
       def <*>(either: Either[L, R1]) = (f, either) match {
