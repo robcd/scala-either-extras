@@ -60,5 +60,16 @@ class Tests extends FunSuite with ShouldMatchers {
     }
     value.check(checks: _*) should equal(expectedValue)
   }
+  test("that substituting Left results in a Left") {
+    //case class CompoundValue(n: Int, b: Boolean, s: String)
+    val i2i2i: Int => Int => Int = x => y => x * y
+    val left: Either[String, Int] = Left("error")
+
+    import EitherOps._
+
+    val x = 2; val y = 3
+    left <*> (Right[String, Int](x) <*> Right(i2i2i)) should equal (left)
+    Right[String, Int](y) <*> (left <*> Right(i2i2i)) should equal (left)
+  }
 }
 
