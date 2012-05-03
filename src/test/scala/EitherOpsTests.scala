@@ -31,28 +31,28 @@ class EitherOpsTests extends FunSuite with ShouldMatchers {
     import EitherOps._
     import allGood._
     val res =
-      lift1(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
+      fast(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
     res should equal(expected)
   }
   test("fail-fast, data all bad") {
     import EitherOps._
     import allBad._
     val res =
-      lift1(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
+      fast(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
     res should equal(expected.failFast)
   }
   test("accumulating msgs, all data good") {
     import EitherOps._
     import allGood._
     val res =
-      lift2(CompoundValue.apply) <**> checkPositive(n) <**> checkTrue(b) <**> checkNonEmpty(s)
+      slow(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
     res should equal(expected)
   }
   test("accumulating msgs, all data bad") {
     import EitherOps._
     import allBad._
     val res =
-      lift2(CompoundValue.apply) <**> checkPositive(n) <**> checkTrue(b) <**> checkNonEmpty(s)
+      slow(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
     res should equal(expected.accumulated)
   }
 }

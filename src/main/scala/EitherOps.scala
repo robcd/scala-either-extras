@@ -8,12 +8,12 @@ class EitherOps[L] {
   trait Enhancer2[R1, R2] {
     /**
      * as for <*> but accumulates the left-hand results. */
-    def <**>(either: Either[L, R1]): Either[List[L], R2]
+    def <*>(either: Either[L, R1]): Either[List[L], R2]
   }
   /**
    * lifts f, which must be curried, into a Right. */
-  def lift1[R1, R2](f: R1 => R2) = Right[L,       R1 => R2](f)
-  def lift2[R1, R2](f: R1 => R2) = Right[List[L], R1 => R2](f)
+  def fast[R1, R2](f: R1 => R2) = Right[L,       R1 => R2](f)
+  def slow[R1, R2](f: R1 => R2) = Right[List[L], R1 => R2](f)
 
   implicit def enhance1[R1, R2](f: Either[L, R1 => R2]): Enhancer1[R1, R2] =
     new Enhancer1[R1, R2] {
@@ -25,7 +25,7 @@ class EitherOps[L] {
     }
   implicit def enhance2[R1, R2](f: Either[List[L], R1 => R2]): Enhancer2[R1, R2] =
     new Enhancer2[R1, R2] {
-      def <**>(either: Either[L, R1]) = (f, either) match {
+      def <*>(either: Either[L, R1]) = (f, either) match {
         case (Left(ls), Left(l)) => Left(ls :+ l)
         case (Left(ls), Right(r)) => Left(ls)
         case (Right(_), Left(l)) => Left(List(l))
