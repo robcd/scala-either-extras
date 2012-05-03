@@ -26,10 +26,12 @@ class EitherOps[L] {
   implicit def enhance2[R1, R2](f: Either[List[L], R1 => R2]): Enhancer2[R1, R2] =
     new Enhancer2[R1, R2] {
       def <**>(either: Either[L, R1]) = (f, either) match {
-        case (Left(ls), Left(l)) => Left(l::ls)
+        case (Left(ls), Left(l)) => Left(ls :+ l)
         case (Left(ls), Right(r)) => Left(ls)
         case (Right(_), Left(l)) => Left(List(l))
         case (Right(f), Right(r1)) => Right(f(r1))
       }
     }
 }
+
+object EitherOps extends EitherOps[String]
