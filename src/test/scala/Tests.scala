@@ -96,10 +96,10 @@ class Tests extends FunSuite with ShouldMatchers {
     //val n2b2s = CompoundValue.apply _
     val n = 1; val b = true; val s = "faen"
     val expected = Right(CompoundValue(n)(b)(s))
-    import EitherOps._
-    //val res: Either[String, _] =
+    object eitherOps extends EitherOps[String]
+    import eitherOps._
     val res =
-      lift(CompoundValue.apply)("") <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
+      lift(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
     res should equal(expected)
   }
 }
