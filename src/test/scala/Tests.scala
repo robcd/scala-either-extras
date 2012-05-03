@@ -99,7 +99,21 @@ class Tests extends FunSuite with ShouldMatchers {
     object eitherOps extends EitherOps[String]
     import eitherOps._
     val res =
-      lift(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
+      lift1(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
+    res should equal(expected)
+  }
+  test("accumulating msgs in app-funct case") {
+    type E[R] = Either[String, R]
+    def checkPositive(n: Int): E[Int] = if (n > 0) Right(n) else Left("Int not > 0: "+ n)
+    def checkTrue(b: Boolean): E[Boolean] = if (b == true) Right(b) else Left("Boolean was "+ b)
+    def checkNonEmpty(s: String): E[String] = if (s != "") Right(s) else Left("Empty String")
+    case class CompoundValue(n: Int)(b: Boolean)(s: String)
+    val n = 1; val b = true; val s = "faen"
+    val expected = Right(CompoundValue(n)(b)(s))
+    object eitherOps extends EitherOps[String]
+    import eitherOps._
+    val res =
+      lift2(CompoundValue.apply) <**> checkPositive(n) <**> checkTrue(b) <**> checkNonEmpty(s)
     res should equal(expected)
   }
 }
