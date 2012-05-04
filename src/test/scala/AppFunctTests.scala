@@ -1,7 +1,7 @@
 import org.scalatest.{FunSuite, matchers}
 import matchers.ShouldMatchers
 
-class EitherOpsTests extends FunSuite with ShouldMatchers {
+class AppFunctTests extends FunSuite with ShouldMatchers {
   type E[R] = Either[String, R]
   def checkPositive(n: Int): E[Int] = if (n > 0) Right(n) else Left("Int not > 0: "+ n)
   def checkTrue(b: Boolean): E[Boolean] = if (b == true) Right(b) else Left("Boolean was "+ b)

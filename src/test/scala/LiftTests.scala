@@ -1,7 +1,7 @@
 import org.scalatest.{FunSuite, matchers}
 import matchers.ShouldMatchers
 
-class Tests extends FunSuite with ShouldMatchers {
+class LiftTests extends FunSuite with ShouldMatchers {
   import EitherExtras._
   test("Int literal succeeds, left-hand type is Any") {
     1.succeed should equal(Right[Any, Int](1))
