@@ -105,7 +105,7 @@ object Test1 extends App with Test {
 object ClubTropicana extends Nightclub {
   def costToEnter(p: Person): Either[List[String], Double] = {
     import EitherExtras._
-    p.checkAndMap(checkAge, checkClothes, checkSobriety) { p =>
+    p.slowCheckAndMap(checkAge, checkClothes, checkSobriety) { p =>
       if (p.gender == Gender.Female) 0D else 7.5D
     }
   }
@@ -148,7 +148,7 @@ object GayBar extends Nightclub {
 
   def costToEnter(p: Person): Either[List[String], Double] = {
     val checks = List(checkAge _, checkClothes _, checkSobriety _, checkGender _)
-    p.checkAndMap(checks: _*)(_.age + 1.5D)
+    p.slowCheckAndMap(checks: _*)(_.age + 1.5D)
   }
 }
 
