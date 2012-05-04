@@ -2,16 +2,38 @@ class EitherExtras[L1] {
   trait Lift[T] {
     def succeed[L2]: Right[L2, T]
     def fail[R]: Left[T, R]
-    def check[L2](checks: ((T) => Either[L2, T])*): Either[List[L2], T]
-    def checkAndMap[L2, R](checks: ((T) => Either[L2, T])*)(f: (T) => R): Either[List[L2], R]
+    /**
+     * as in fail-fast: returns at the first failure. */
+    def fastCheck[L2](checks: ((T) => Either[L2, T])*): Either[L2, T]
+    /**
+     * as in fail-slow: all checks are carried out. */
+    def slowCheck[L2](checks: ((T) => Either[L2, T])*): Either[List[L2], T]
+    /**
+     * applies f if there were no failures. */
+    def fastCheckAndMap[L2, R](checks: ((T) => Either[L2, T])*)(f: (T) => R): Either[L2, R]
+    def slowCheckAndMap[L2, R](checks: ((T) => Either[L2, T])*)(f: (T) => R): Either[List[L2], R]
   }
 
   implicit def any2Lift[T](any: T): Lift[T] = new Lift[T] {
     def succeed[L2] = Right[L2, T](any)
     def fail[R] = Left[T, R](any)
-    def check[L2](checks: ((T) => Either[L2, T])*): Either[List[L2], T] =
-      checkAndMap[L2, T](checks: _*) { t => t }
-    def checkAndMap[L2, R](checks: ((T) => Either[L2, T])*)(f: (T) => R): Either[List[L2], R] = {
+    def fastCheck[L2](checks: ((T) => Either[L2, T])*): Either[L2, T] =
+      fastCheckAndMap[L2, T](checks: _*) { t => t }
+    def fastCheckAndMap[L2, R](checks: ((T) => Either[L2, T])*)(f: (T) => R): Either[L2, R] = {
+      var msg: Option[Left[L2, R]] = None
+      checks.find { check =>
+        check(any) match {
+          case Left(x) =>
+            msg = Some(Left(x))
+          true
+          case _ => false
+        }
+      }
+      msg.getOrElse(Right(f(any)))
+    }
+    def slowCheck[L2](checks: ((T) => Either[L2, T])*): Either[List[L2], T] =
+      slowCheckAndMap[L2, T](checks: _*) { t => t }
+    def slowCheckAndMap[L2, R](checks: ((T) => Either[L2, T])*)(f: (T) => R): Either[List[L2], R] = {
       val msgs = for {
         check <- checks.toList // from WrappedArray
         msg <- check(any).left.toSeq
