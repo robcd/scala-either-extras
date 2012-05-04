@@ -28,32 +28,31 @@ class AppFunctTests extends FunSuite with ShouldMatchers {
   }
 
   test("fail-fast, data all good") {
-    import EitherOps._
+    import EitherExtras._
     import allGood._
     val res =
       fast(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
     res should equal(expected)
   }
   test("fail-fast, data all bad") {
-    import EitherOps._
+    import EitherExtras._
     import allBad._
     val res =
       fast(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
     res should equal(expected.failFast)
   }
-  test("accumulating msgs, all data good") {
-    import EitherOps._
+  test("fail-slow, all data good") {
+    import EitherExtras._
     import allGood._
     val res =
       slow(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
     res should equal(expected)
   }
-  test("accumulating msgs, all data bad") {
-    import EitherOps._
+  test("fail-slow, all data bad") {
+    import EitherExtras._
     import allBad._
     val res =
       slow(CompoundValue.apply) <*> checkPositive(n) <*> checkTrue(b) <*> checkNonEmpty(s)
     res should equal(expected.accumulated)
   }
 }
-
