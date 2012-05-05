@@ -7,8 +7,8 @@ trait UsingExceptions {
   val res = f(a, b)
 }
 
-trait UsingEither[L] {
-  this: EitherExtras[L] =>
+trait UsingEither {
+  this: EitherExtras =>
   type T
   type E[T] = Either[L, T]
   def a: E[T]
@@ -19,7 +19,8 @@ trait UsingEither[L] {
   val res2 = slow(f) <*> a <*> b
 }
 
-object test extends UsingEither[Exception] with EitherExtras[Exception] with App {
+object test extends UsingEither with EitherExtras with App {
+  type L = Exception
   type T = Int
   def a = Left(new Exception("couldn't obtain a"))
   def b = Left(new Exception("couldn't obtain b"))
