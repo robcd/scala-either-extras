@@ -1,4 +1,4 @@
-object app extends App {
+object usingEitherApp extends App {
   trait UsingExceptions {
     type T
     def f(a: T, b: T): T
