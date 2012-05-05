@@ -1,25 +1,25 @@
-trait UsingExceptions {
-  type T
-  def f(a: T, b: T): T
-  def g: T
-  def h: T
-
-  val res = f(g, h)
-}
-
-trait UsingEither {
-  this: EitherExtras =>
-  type T
-  type E[T] = Either[L, T]
-  def f(a: T)(b: T): T
-  def g: E[T]
-  def h: E[T]
-
-  val res1 = fast(f) <*> g <*> h
-  val res2 = slow(f) <*> g <*> h
-}
-
 object app extends App {
+  trait UsingExceptions {
+    type T
+    def f(a: T, b: T): T
+    def g: T
+    def h: T
+
+    val res = f(g, h)
+  }
+
+  trait UsingEither {
+    this: EitherExtras =>
+      type T
+    type E[T] = Either[L, T]
+    def f(a: T)(b: T): T
+    def g: E[T]
+    def h: E[T]
+
+    val res1 = fast(f) <*> g <*> h
+    val res2 = slow(f) <*> g <*> h
+  }
+
   trait Eg extends UsingEither with EitherExtras {
     type T = Int
     type L = Exception
