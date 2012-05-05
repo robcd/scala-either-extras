@@ -1,4 +1,4 @@
-class EitherExtras[L1] {
+trait EitherExtras[L1] {
   trait Lift[T] {
     def succeed[L2]: Right[L2, T]
     def fail[R]: Left[T, R]
