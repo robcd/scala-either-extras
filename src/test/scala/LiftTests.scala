@@ -22,43 +22,59 @@ class LiftTests extends FunSuite with ShouldMatchers {
   type E = Either[String, T]
   def checkTrue(t: T): E = if (t._1 == true) Right(t) else Left("Boolean field was "+ t._1)
   def checkPositive(t: T): E = if (t._2 > 0) Right(t) else Left("Int field not > 0: "+ t._2)
-
-  test("slowCheck (without mapping) bad value") {
-    val value: T = (false, -1)
-    val expectedValue = {
-      val msgs = List("Boolean field was "+ value._1, "Int field not > 0: "+ value._2)
-      Left[List[String], T](msgs)
+  val badValue: T = (false, -1)
+  val goodValue: T = (true, 1)
+  object expected {
+    object fast {
+      val succ = Right[String, T](goodValue)
+      val fail = Left[String, T]("Boolean field was "+ badValue._1)
     }
-    value.slowCheck(checkTrue, checkPositive) should equal(expectedValue)
+    object slow {
+      val succ = Right[List[String], T](goodValue)
+      val fail = {
+        val msgs = List("Boolean field was "+ badValue._1, "Int field not > 0: "+ badValue._2)
+        Left[List[String], T](msgs)
+      }
+    }
+  }
+
+  test("fastCheck (without mapping) bad value") {
+    badValue.fastCheck(checkTrue, checkPositive) should equal(expected.fast.fail)
+  }
+  test("slowCheck (without mapping) bad value") {
+    badValue.slowCheck(checkTrue, checkPositive) should equal(expected.slow.fail)
+  }
+  test("fastCheck (without mapping) good value") {
+    goodValue.fastCheck(checkTrue, checkPositive) should equal(expected.fast.succ)
   }
   test("slowCheck (without mapping) good value") {
-    val value: T = (true, 1)
-    val expectedValue = Right[List[String], T](value)
-    value.slowCheck(checkTrue, checkPositive) should equal(expectedValue)
+    goodValue.slowCheck(checkTrue, checkPositive) should equal(expected.slow.succ)
   }
   test("slowCheckAndMap bad value") {
-    val value: T = (false, -1)
-    val expectedValue = {
-      val msgs = List("Boolean field was "+ value._1, "Int field not > 0: "+ value._2)
-      Left[List[String], T](msgs)
-    }
     def f(t: T) = t.toString
-    value.slowCheckAndMap(checkTrue, checkPositive)(f) should equal(expectedValue)
+    badValue.slowCheckAndMap(checkTrue, checkPositive)(f) should equal(expected.slow.fail)
+  }
+  test("fastCheckAndMap bad value") {
+    def f(t: T) = t.toString
+    badValue.fastCheckAndMap(checkTrue, checkPositive)(f) should equal(expected.fast.fail)
   }
   test("slowCheckAndMap good value") {
-    val value: T = (true, 1)
-    val expectedValue = Right[List[String], String](value.toString)
+    val expectedValue = Right[List[String], String](goodValue.toString)
     def f(t: T) = t.toString
-    value.slowCheckAndMap(checkTrue, checkPositive)(f) should equal(expectedValue)
+    goodValue.slowCheckAndMap(checkTrue, checkPositive)(f) should equal(expectedValue)
   }
-  test("slowCheck taking Seq") {
-    val value: T = (false, -1)
+  test("fastCheckAndMap good value") {
+    val expectedValue = Right[List[String], String](goodValue.toString)
+    def f(t: T) = t.toString
+    goodValue.fastCheckAndMap(checkTrue, checkPositive)(f) should equal(expectedValue)
+  }
+  test("slowCheck taking Seq, bad value") {
     val checks = Seq(checkTrue _, checkPositive _)
-    val expectedValue = {
-      val msgs = List("Boolean field was "+ value._1, "Int field not > 0: "+ value._2)
-      Left[List[String], T](msgs)
-    }
-    value.slowCheck(checks: _*) should equal(expectedValue)
+    badValue.slowCheck(checks: _*) should equal(expected.slow.fail)
+  }
+  test("fastCheck taking Seq, bad value") {
+    val checks = Seq(checkTrue _, checkPositive _)
+    badValue.fastCheck(checks: _*) should equal(expected.fast.fail)
   }
 }
 
