@@ -10,7 +10,7 @@ object app extends App {
 
   trait UsingEither {
     this: EitherExtras =>
-      type T
+    type T
     type E[T] = Either[L, T]
     def f(a: T)(b: T): T
     def g: E[T]
@@ -22,25 +22,25 @@ object app extends App {
 
   trait Eg extends UsingEither with EitherExtras {
     type T = Int
-    type L = Exception
+    type L = String
     def f(a: T)(b: T) = a*b
 
     println(res1)
     println(res2)
   }
   new Eg {
-    def g = Left(new Exception("couldn't obtain g"))
-    def h = Left(new Exception("couldn't obtain h"))
+    def g = Left("couldn't obtain g")
+    def h = Left("couldn't obtain h")
 
-    // Left(java.lang.Exception: couldn't obtain g)
-    // Left(List(java.lang.Exception: couldn't obtain g, java.lang.Exception: couldn't obtain h))
+    // Left(couldn't obtain g)
+    // Left(List(couldn't obtain g, couldn't obtain h))
   }
   new Eg {
     def g = Right(2)
-    def h = Left(new Exception("couldn't obtain h"))
+    def h = Left("couldn't obtain h")
 
-    // Left(java.lang.Exception: couldn't obtain h)
-    // Left(List(java.lang.Exception: couldn't obtain h))
+    // Left(couldn't obtain h)
+    // Left(List(couldn't obtain h))
   }
   new Eg {
     def g = Right(2)
