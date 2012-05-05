@@ -19,14 +19,34 @@ trait UsingEither {
   val res2 = slow(f) <*> g <*> h
 }
 
-object test extends UsingEither with EitherExtras with App {
-  type L = Exception
-  type T = Int
+object app extends App {
+  trait Eg extends UsingEither with EitherExtras {
+    type T = Int
+    type L = Exception
+    def f(a: T)(b: T) = a*b
 
-  def f(a: T)(b: T) = a*b
-  def g = Left(new Exception("couldn't obtain g"))
-  def h = Left(new Exception("couldn't obtain h"))
+    println(res1)
+    println(res2)
+  }
+  new Eg {
+    def g = Left(new Exception("couldn't obtain g"))
+    def h = Left(new Exception("couldn't obtain h"))
 
-  println(res1)
-  println(res2)
+    // Left(java.lang.Exception: couldn't obtain g)
+    // Left(List(java.lang.Exception: couldn't obtain g, java.lang.Exception: couldn't obtain h))
+  }
+  new Eg {
+    def g = Right(2)
+    def h = Left(new Exception("couldn't obtain h"))
+
+    // Left(java.lang.Exception: couldn't obtain h)
+    // Left(List(java.lang.Exception: couldn't obtain h))
+  }
+  new Eg {
+    def g = Right(2)
+    def h = Right(3)
+
+    // Right(6)
+    // Right(6)
+  }
 }
