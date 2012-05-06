@@ -20,7 +20,7 @@ when all the values are valid.
 
 Such a function is first lifted into an `Either`, by passing it to the
 provided `fast` or `slow` method (for either fail-fast or fail-slow
-application).  This is then followed the `<*>` operator (borrowed from
+application).  This is then followed by the `<*>` operator (borrowed from
 Haskell), which is in turn followed by checks corresponding to each
 argument of the function, separated by further `<*>`s.
 
@@ -35,7 +35,7 @@ applying multiple checks to a single value, like so:
 The [new
 EitherExtras](scala-either-extras/blob/master/src/main/scala/EitherExtras.scala)
 trait is itself no longer a type class, but rather an outer trait,
-having now three type classes, as inner traits.
+having, now, three type classes as inner traits.
 
 It may therefore now be brought into scope in different ways.
 
