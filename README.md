@@ -48,8 +48,9 @@ object, and import that:
 
     object MyEitherExtras extends EitherExtras {
       type L = SomethingOtherThanString
-      // N.B. the compiler no longer warns you if you forget to add this -
-      // it just won't compile whatever tries to import this object :-(
+      // N.B. If you forget to add this, you won't hear about it from
+      // the compiler until something tries to use it, which can be
+      // problematic it that something is compiled separately :-(
     }
 
 Otherwise, you can mix it into your self type, or extend it straight
