@@ -57,7 +57,7 @@ object usingEitherApp2 extends App {
   }
   new Eg {
     def c = (2, null)
-    def d = (0, "orange")
+    def d = (0, "tenor")
 
     // Left(name was null)
     // Left(List(name was null,
@@ -68,7 +68,7 @@ object usingEitherApp2 extends App {
     //           must be at least one item))
   }
   new Eg {
-    def c = (2, "apple")
+    def c = (2, "alto")
     def d = (3, "")
 
     // Left(empty name)
@@ -77,12 +77,12 @@ object usingEitherApp2 extends App {
     // Left(List(empty name))
   }
   new Eg {
-    def c = (2, "apple")
-    def d = (3, "orange")
+    def c = (2, "alto")
+    def d = (3, "tenor")
 
-    // Right((5,apple & orange items))
-    // Right((5,apple & orange items))
-    // Right((5,apple & orange items))
-    // Right((5,apple & orange items))
+    // Right((5,alto & tenor items))
+    // Right((5,alto & tenor items))
+    // Right((5,alto & tenor items))
+    // Right((5,alto & tenor items))
   }
 }
