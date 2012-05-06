@@ -11,10 +11,10 @@ object usingEitherApp extends App {
   trait UsingEither {
     this: EitherExtras =>
     type T
-    type E[T] = Either[L, T]
+    type E = Either[L, T]
     def f(a: T)(b: T): T
-    def g: E[T]
-    def h: E[T]
+    def g: E
+    def h: E
 
     val res1 = fast(f) <*> g <*> h
     val res2 = slow(f) <*> g <*> h
