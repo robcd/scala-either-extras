@@ -51,7 +51,7 @@ trait EitherExtras {
     def <*>(either: Either[L, R1]): Either[L, R2]
     /**
      * as above, using just the head of the list in the case of a Left. */
-    def <**>(either: Either[List[L], R1]): Either[L, R2]
+    def <*>[M](either: Either[M, R1])(implicit ev: M <:< List[L]): Either[L, R2]
   }
   trait SlowAppFunct[R1, R2] {
     /**
@@ -59,7 +59,7 @@ trait EitherExtras {
     def <*>(either: Either[L, R1]): Either[List[L], R2]
     /**
      * as above, keeping all the elements in the case of a Left. */
-    def <**>(either: Either[List[L], R1]): Either[List[L], R2]
+    def <*>[M](either: Either[M, R1])(implicit ev: M <:< List[L]): Either[List[L], R2]
   }
   /**
    * lifts f, which must be curried, into a Right, for fail-fast application. */
@@ -75,7 +75,7 @@ trait EitherExtras {
         case (Right(_), Left(l)) => Left(l)
         case (Right(f), Right(r1)) => Right(f(r1))
       }
-      def <**>(either: Either[List[L], R1]) = either match {
+      def <*>[M](either: Either[M, R1])(implicit ev: M <:< List[L]) = either match {
         case Left(ls) => <*>(Left[L, R1](ls.head))
         case Right(r1) => <*>(Right[L, R1](r1))
       }
@@ -88,7 +88,7 @@ trait EitherExtras {
         case (Right(_), Left(l)) => Left(List(l))
         case (Right(f), Right(r1)) => Right(f(r1))
       }
-      def <**>(either: Either[List[L], R1]) = (f, either) match {
+      def <*>[M](either: Either[M, R1])(implicit ev: M <:< List[L]) = (f, either) match {
         case (Left(ls1), Left(ls2)) => Left(ls1 ++ ls2)
         case (Left(ls), Right(_)) => Left(ls)
         case (Right(_), Left(ls)) => Left(ls)
