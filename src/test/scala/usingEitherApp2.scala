@@ -45,18 +45,27 @@ object usingEitherApp2 extends App {
     def d = (-1, null)
 
     // Left(must be at least one item)
-    // Left(List(must be at least one item, must be at least one item))
-    // Left(List(must be at least one item, empty name, must be at least one item, name was null))
-    // Left(List(must be at least one item, must be at least one item, name was null))
+    // Left(List(must be at least one item,
+    //           must be at least one item))
+    // Left(List(must be at least one item,
+    //           empty name,
+    //           must be at least one item,
+    //           name was null))
+    // Left(List(must be at least one item,
+    //           must be at least one item,
+    //           name was null))
   }
   new Eg {
     def c = (2, null)
     def d = (0, "orange")
 
     // Left(name was null)
-    // Left(List(name was null, must be at least one item))
-    // Left(List(name was null, must be at least one item))
-    // Left(List(name was null, must be at least one item))
+    // Left(List(name was null,
+    //           must be at least one item))
+    // Left(List(name was null,
+    //           must be at least one item))
+    // Left(List(name was null,
+    //           must be at least one item))
   }
   new Eg {
     def c = (2, "apple")
