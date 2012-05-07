@@ -2,7 +2,8 @@ object usingEitherApp3 extends App {
   case class MyCaseClass(qty: Int)(name: String)
   object MyCaseClass {
     type E[T] = Either[String, T]
-    def checkQty(qty: Int): E[Int] = if (qty > 0) Right(qty) else Left("qty must be > 0")
+    def checkQty(qty: Int): E[Int] =
+      if (qty > 0) Right(qty) else Left("qty must be > 0")
     def checkName(name: String): E[String] = name match {
       case null => Left("name was null")
       case "" => Left("empty name")

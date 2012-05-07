@@ -18,10 +18,17 @@ object usingEitherApp2 extends App {
     def check1(a: T): E
     def check2(a: T): E
 
-    val res1 = fast(f) <*> a.fastCheck(check1, check2) <*> b.fastCheck(check1, check2)
-    val res2 = slow(f) <*> a.fastCheck(check1, check2) <*> b.fastCheck(check1, check2)
-    val res3 = slow(f) <*> a.slowCheck(check1, check2) <*> b.slowCheck(check1, check2)
-    val res4 = slow(f) <*> a.fastCheck(check1, check2) <*> b.slowCheck(check1, check2)
+    val res1 = fast(f) <*> a.fastCheck(check1, check2) <*>
+                           b.fastCheck(check1, check2)
+
+    val res2 = slow(f) <*> a.fastCheck(check1, check2) <*>
+                           b.fastCheck(check1, check2)
+
+    val res3 = slow(f) <*> a.slowCheck(check1, check2) <*>
+                           b.slowCheck(check1, check2)
+
+    val res4 = slow(f) <*> a.fastCheck(check1, check2) <*>
+                           b.slowCheck(check1, check2)
   }
 
   trait Eg extends UsingEither with EitherExtras {
