@@ -2,10 +2,10 @@ object usingEitherApp extends App {
   trait UsingExceptions {
     type T
     def f(a: T, b: T): T
-    def g: T
-    def h: T
+    def a: T
+    def b: T
 
-    val res = f(g, h)
+    val res = f(a, b)
   }
 
   trait UsingEither {
@@ -13,11 +13,11 @@ object usingEitherApp extends App {
     type T
     type E = Either[L, T]
     def f(a: T)(b: T): T
-    def g: E
-    def h: E
+    def a: E
+    def b: E
 
-    val res1 = fast(f) <*> g <*> h
-    val res2 = slow(f) <*> g <*> h
+    val res1 = fast(f) <*> a <*> b
+    val res2 = slow(f) <*> a <*> b
   }
 
   trait Eg extends UsingEither with EitherExtras {
@@ -29,22 +29,22 @@ object usingEitherApp extends App {
     println(res2)
   }
   new Eg {
-    def g = Left("couldn't obtain g")
-    def h = Left("couldn't obtain h")
+    def a = Left("couldn't obtain a")
+    def b = Left("couldn't obtain b")
 
-    // Left(couldn't obtain g)
-    // Left(List(couldn't obtain g, couldn't obtain h))
+    // Left(couldn't obtain a)
+    // Left(List(couldn't obtain a, couldn't obtain b))
   }
   new Eg {
-    def g = Right(2)
-    def h = Left("couldn't obtain h")
+    def a = Right(2)
+    def b = Left("couldn't obtain b")
 
-    // Left(couldn't obtain h)
-    // Left(List(couldn't obtain h))
+    // Left(couldn't obtain b)
+    // Left(List(couldn't obtain b))
   }
   new Eg {
-    def g = Right(2)
-    def h = Right(3)
+    def a = Right(2)
+    def b = Right(3)
 
     // Right(6)
     // Right(6)
