@@ -2,26 +2,26 @@ object usingEitherApp2 extends App {
   trait UsingExceptions {
     type T
     def f(a: T, b: T): T
-    def c: T
-    def d: T
+    def a: T
+    def b: T
 
-    val res = f(c, d)
+    val res = f(a, b)
   }
 
   trait UsingEither {
     this: EitherExtras =>
     type T
     def f(a: T)(b: T): T
-    def c: T
-    def d: T
+    def a: T
+    def b: T
     type E = Either[L, T]
     def check1(a: T): E
     def check2(a: T): E
 
-    val res1 = fast(f) <*> c.fastCheck(check1, check2) <*> d.fastCheck(check1, check2)
-    val res2 = slow(f) <*> c.fastCheck(check1, check2) <*> d.fastCheck(check1, check2)
-    val res3 = slow(f) <*> c.slowCheck(check1, check2) <*> d.slowCheck(check1, check2)
-    val res4 = slow(f) <*> c.fastCheck(check1, check2) <*> d.slowCheck(check1, check2)
+    val res1 = fast(f) <*> a.fastCheck(check1, check2) <*> b.fastCheck(check1, check2)
+    val res2 = slow(f) <*> a.fastCheck(check1, check2) <*> b.fastCheck(check1, check2)
+    val res3 = slow(f) <*> a.slowCheck(check1, check2) <*> b.slowCheck(check1, check2)
+    val res4 = slow(f) <*> a.fastCheck(check1, check2) <*> b.slowCheck(check1, check2)
   }
 
   trait Eg extends UsingEither with EitherExtras {
@@ -41,8 +41,8 @@ object usingEitherApp2 extends App {
     println(res4)
   }
   new Eg {
-    def c = (0, "")
-    def d = (-1, null)
+    def a = (0, "")
+    def b = (-1, null)
 
     // Left(must be at least one item)
     // Left(List(must be at least one item,
@@ -56,8 +56,8 @@ object usingEitherApp2 extends App {
     //           name was null))
   }
   new Eg {
-    def c = (2, null)
-    def d = (0, "tenor")
+    def a = (2, null)
+    def b = (0, "tenor")
 
     // Left(name was null)
     // Left(List(name was null,
@@ -68,8 +68,8 @@ object usingEitherApp2 extends App {
     //           must be at least one item))
   }
   new Eg {
-    def c = (2, "alto")
-    def d = (3, "")
+    def a = (2, "alto")
+    def b = (3, "")
 
     // Left(empty name)
     // Left(List(empty name))
@@ -77,8 +77,8 @@ object usingEitherApp2 extends App {
     // Left(List(empty name))
   }
   new Eg {
-    def c = (2, "alto")
-    def d = (3, "tenor")
+    def a = (2, "alto")
+    def b = (3, "tenor")
 
     // Right((5,alto & tenor items))
     // Right((5,alto & tenor items))
