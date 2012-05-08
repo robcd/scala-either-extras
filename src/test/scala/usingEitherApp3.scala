@@ -1,5 +1,5 @@
 object usingEitherApp3 extends App {
-  case class MyCaseClass(qty: Int)(name: String)
+  case class MyCaseClass(qty: Int, name: String)
   object MyCaseClass {
     type E[T] = Either[String, T]
     def checkQty(qty: Int): E[Int] =
@@ -17,7 +17,7 @@ object usingEitherApp3 extends App {
     def name: String
 
     import MyCaseClass._
-    val res1 = slow(apply) <*> checkQty(qty) <*> checkName(name)
+    val res1 = slow((apply _).curried) <*> checkQty(qty) <*> checkName(name)
   }
   trait Case extends UsingEither with EitherExtras {
     println(res1)
