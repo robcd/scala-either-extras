@@ -1,3 +1,5 @@
+package org.lafros.scala
+
 trait EitherExtras {
   trait Lift[T] {
     def succeed[L]: Right[L, T]

@@ -1,3 +1,5 @@
+import org.lafros.scala.EitherExtras
+
 object usingEitherApp3 extends App {
   case class MyCaseClass(qty: Int, name: String)
   object MyCaseClass {

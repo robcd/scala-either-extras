@@ -1,3 +1,4 @@
+import org.lafros.scala.EitherExtras
 /**
  * Part Zero : 10:15 Saturday Night
  */

@@ -1,3 +1,4 @@
+import org.lafros.scala.EitherExtras
 import org.scalatest.{FunSuite, matchers}
 import matchers.ShouldMatchers
 

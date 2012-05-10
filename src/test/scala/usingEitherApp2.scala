@@ -1,3 +1,5 @@
+import org.lafros.scala.EitherExtras
+
 object usingEitherApp2 extends App {
   trait UsingExceptions {
     type T
