@@ -1,3 +1,11 @@
+/*
+ * <p>This code is derived from a Github Gist written by Chris Marshall:
+ *   https://gist.github.com/970717
+ * </p>
+ * <p>It is essentially a copy of a fork of the above, made by Rob Dickens:
+ *   https://gist.github.com/1241855
+ * </p>
+ */
 import org.lafros.scala.EitherExtras
 /**
  * Part Zero : 10:15 Saturday Night
