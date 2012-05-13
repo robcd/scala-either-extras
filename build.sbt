@@ -35,7 +35,7 @@ pomExtra := (
   </licenses>
   <scm>
     <url>git@github.com:robcd/scala-either-extras.git</url>
-    <connection>scm:git:git@github.com:jsuereth/scala-arm.git</connection>
+    <connection>scm:git:git@github.com:robcd/scala-either-extras.git</connection>
   </scm>
   <developers>
     <developer>
