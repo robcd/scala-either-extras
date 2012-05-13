@@ -1,4 +1,4 @@
-name := "either-extras"
+name := "scala-either-extras"
 
 organization := "org.lafros"
 
