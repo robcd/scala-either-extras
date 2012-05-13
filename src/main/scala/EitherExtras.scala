@@ -66,20 +66,22 @@ trait EitherExtras {
 
   trait FastAppFunct[R1, R2] {
     /**
-     * confers fail-fast applicative-functor status: lets you apply a FunctionN to N values in N
-     * contexts. */
-    def <*>(either: Either[L, R1]): Either[L, R2]
-    /**
-     * as above, using just the head of the list in the case of a Left. */
+     * handles a fail-slow result, where Left contains a List. */
     def <*>[M](either: Either[M, R1])(implicit ev: M <:< List[L]): Either[L, R2]
+    /**
+     * confers fail-fast applicative-functor status: lets you apply a FunctionN to N values in N
+     * contexts, failing as soon as the first Left is encountered. */
+    def <*>(either: Either[L, R1]): Either[L, R2]
   }
   trait SlowAppFunct[R1, R2] {
     /**
-     * as above but fail-slow: continues in order to accumulate further left-hand results. */
-    def <*>(either: Either[L, R1]): Either[List[L], R2]
-    /**
-     * as above, keeping all the elements in the case of a Left. */
+     * handles a fail-slow result, where Left contains a List. */
     def <*>[M](either: Either[M, R1])(implicit ev: M <:< List[L]): Either[List[L], R2]
+    /**
+     * confers fail-slow applicative-functor status: lets you apply a FunctionN to N values in N
+     * contexts, continuing to accumulate further left-hand results after the first is
+     * encountered. */
+    def <*>(either: Either[L, R1]): Either[List[L], R2]
   }
   /**
    * lifts f, which must be curried, into a Right, for fail-fast application. */
