@@ -71,3 +71,10 @@ The tests class are
 [AppFunctTests](scala-either-extras/blob/master/src/test/scala/AppFunctTests.scala)
 and
 [AppFunctTests2](scala-either-extras/blob/master/src/test/scala/AppFunctTests2.scala).
+
+Further Reading
+---------------
+
+[Validation without Scalaz](http://robsscala.blogspot.co.uk/2012/04/validation-without-scalaz.html)  
+[Validating multiple values at once (without Scalaz)](http://robsscala.blogspot.co.uk/2012/05/validating-multiple-values-at-once.html)  
+[EitherExtras class files now published](http://robsscala.blogspot.co.uk/2012/05/eitherextras-class-files-now-published.html)
