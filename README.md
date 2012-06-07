@@ -66,7 +66,7 @@ For example apps, please see
 and
 [usingEitherApp3](scala-either-extras/blob/master/src/test/scala/usingEitherApp3.scala).
 
-The tests class are
+The test classes are
 [LiftTests](scala-either-extras/blob/master/src/test/scala/LiftTests.scala),
 [AppFunctTests](scala-either-extras/blob/master/src/test/scala/AppFunctTests.scala)
 and
